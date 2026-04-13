@@ -1,0 +1,7 @@
+django 
+djangorestframework 
+pymongo 
+dnspython 
+python-dotenv 
+djangorestframework-simplejwt 
+corsheaders
