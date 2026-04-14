@@ -26,7 +26,12 @@ SECRET_KEY = 'django-insecure-85@w$997f8nnw=wge=sx3@l38b1@&!gnf+igua_4!x^4-7bnxb
 DEBUG = os.environ.get('DJANGO_DEBUG') == 'True'
 
 
-ALLOWED_HOSTS = ["https://youtube-bookmark-frontend.vercel.app","http://localhost:5173"]
+ALLOWED_HOSTS = [
+    "youtube-bookmark-backend.onrender.com",
+    ".onrender.com",
+    "127.0.0.1",
+    "localhost",
+]
 
 
 # Application definition
