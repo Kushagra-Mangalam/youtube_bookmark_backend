@@ -13,9 +13,21 @@ class MongoJWTAuthentication(JWTAuthentication):
         """
         Instead of looking up a Django User, return a simple object
         with the token claims so that request.user works with IsAuthenticated.
+        Falls back to a MongoDB lookup if the email claim is missing.
         """
         email = validated_token.get("email")
         user_id = validated_token.get("user_id")
+
+        # Fallback: if email is missing but user_id exists, look up from DB
+        if not email and user_id:
+            try:
+                from config.db import db
+                from bson import ObjectId
+                user_doc = db["users"].find_one({"_id": ObjectId(user_id)})
+                if user_doc:
+                    email = user_doc.get("email")
+            except Exception:
+                pass
 
         if not email:
             raise InvalidToken("Token contained no recognizable user identification")

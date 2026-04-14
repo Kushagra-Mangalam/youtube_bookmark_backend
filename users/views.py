@@ -1,8 +1,17 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenRefreshView
 from .services import create_user , authenticate_user
-from .serializers import RegisterSerializer,LoginSerializer
+from .serializers import RegisterSerializer, LoginSerializer, CustomTokenRefreshSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+
+
+class CustomTokenRefreshView(TokenRefreshView):
+    """
+    Uses our custom serializer that carries the 'email' and 'user_id'
+    claims into the new access token after a refresh.
+    """
+    serializer_class = CustomTokenRefreshSerializer
 
 
 def get_tokens(user):
@@ -49,4 +58,4 @@ def login(request):
 
 @api_view(["GET"])
 def hello_api(request):
-    return Response({"message":"hello from django0"})
+    return Response({"message":"ok"})
