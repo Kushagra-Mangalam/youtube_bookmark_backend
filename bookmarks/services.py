@@ -4,15 +4,25 @@ videos_collection=db["videos"]
 
 
 def save_bookmark(user_email , video_id, time , desc):
-    bookmark_data={
+    query={
         "user_email":user_email,
         "videoId":video_id,
         "time":time,
-        "desc":desc
     }
 
-    result = bookmarks_collection.insert_one(bookmark_data)
-    return str(result.inserted_id)
+    update={
+        "$setOnInsert":{
+            "user_email":user_email,
+            "videoId":video_id,
+            "time":time,
+        },
+        "$set":{
+            "desc":desc
+        }
+    }
+
+    result = bookmarks_collection.update_one(query,update,upsert=True)
+    return str(result.inserted_id)if result.upserted_id else "updated"
 
 
 def get_user_bookmarks(user_email, video_id=None):
